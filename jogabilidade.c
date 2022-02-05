@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "jogabilidade.h"
 
 
@@ -39,7 +40,7 @@ fieldNode *acharPosicaoDeUmNo( list *L, int numeroDaPosicao, int letraDaPosicao)
 // depois chama a função de achar a casa
 // após isso ela verifica se a casa escolhida 
 //tem alguma embarcação ou só tem água 
-void DarUmTiro( list *L, list *listaAtirador, int numero, int letra ) {
+int DarUmTiro( list *L, list *listaAtirador, int numero, int letra ) {
     fieldNode *ponteiroComAposicao;
     int numeroDaPosicaoDesejada;
     int letraDaPosicaoDesejada;
@@ -56,17 +57,16 @@ void DarUmTiro( list *L, list *listaAtirador, int numero, int letra ) {
 
     ponteiroComAposicao = acharPosicaoDeUmNo(L, numero, letra);
 
-    printf("o tipo do barco é %d\n", ponteiroComAposicao->oqueTemNesseNo);
-    printf("a direção do barco é %d\n", ponteiroComAposicao->direcao);
+    
 
     if ( ponteiroComAposicao->oqueTemNesseNo == AGUA) {
         *((char*)ponteiroComAposicao->info) = 'O';
     }else {
         *((char*)ponteiroComAposicao->info) = '*';
-        verificarOsDanosDoTiro( L, listaAtirador, ponteiroComAposicao );
+        k = verificarOsDanosDoTiro( L, listaAtirador, ponteiroComAposicao );
     }
 
-     
+    return k;
 
 };
 
@@ -182,7 +182,7 @@ void colocarEmbarcacaoNaPosicao( list *L, int tipoDaEmbarcacao, int direcao,  in
 };
 
 
-void verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido ) {
+int verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido ) {
     int k = 0;
 
     if ( noAtingido->oqueTemNesseNo == JANGADA ) {
@@ -194,17 +194,17 @@ void verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido
             printf("Como penalidade perderá um submarino, caso ainda tenha um.\n");
         }
         L->donoDoTabuleiro->totalDeEmbarcacoes -= 1;
-        listaAtidador->donoDoTabuleiro->submarino -= 1;
+        
         listaAtidador->donoDoTabuleiro->totalDeEmbarcacoes -= 1;
         if ( listaAtidador->donoDoTabuleiro->submarino1 != NULL ) {
             *((char*)listaAtidador->donoDoTabuleiro->submarino1->info) = '*';
-            listaAtidador->donoDoTabuleiro->submarino -= 1;
+            
             listaAtidador->donoDoTabuleiro->submarino1 = NULL;
         }else if (listaAtidador->donoDoTabuleiro->submarino2 != NULL) {
             *((char*)listaAtidador->donoDoTabuleiro->submarino1->info) = '*';
             
         }
-
+        return 0;
     }else if ( noAtingido->oqueTemNesseNo == SUBMARINO ) {
         if ( listaAtidador->donoDoTabuleiro->tipoDeJogador == JOGADOR ) {
             printf("O jogador afundou um submarino do computador.\n");
@@ -213,7 +213,8 @@ void verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido
             printf("O computador afundou um submarino do jogador.\n");
             
         }
-         L->donoDoTabuleiro->totalDeEmbarcacoes -= 1;
+        L->donoDoTabuleiro->totalDeEmbarcacoes -= 1;
+        return 1;
     }else {
         switch (noAtingido->oqueTemNesseNo) {
             case FRAGATAS:
@@ -255,13 +256,14 @@ void verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido
                         }
                     }
                 }
+                return 1;
                 break;
             case DESTROYER:
                 if ( noAtingido->direcao == VERTICAL ) {
                     
                     if ( noAtingido->up->oqueTemNesseNo == DESTROYER && *((char*)noAtingido->up->info) == '*' ) {
                         if (noAtingido->down->oqueTemNesseNo == DESTROYER && *((char*)noAtingido->down->info) == '*') {
-                            printf("aaa\n");
+                            
                             L->donoDoTabuleiro->totalDeEmbarcacoes -= 1;
 
                             if ( listaAtidador->donoDoTabuleiro->tipoDeJogador == JOGADOR ) {
@@ -294,7 +296,7 @@ void verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido
                     }
 
                 }else {
-                    printf("afddfddfdf\n");
+                  
                     if ( noAtingido->right->oqueTemNesseNo == DESTROYER && *((char*)noAtingido->right->info) == '*' ) {
                         if (noAtingido->left->oqueTemNesseNo == DESTROYER && *((char*)noAtingido->left->info) == '*') {
                             L->donoDoTabuleiro->totalDeEmbarcacoes -= 1;
@@ -327,6 +329,8 @@ void verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido
                         }
                     }
                 }
+                return 1;
+                break;
             case PORTA_AVIAO:
                 if ( noAtingido->direcao == VERTICAL ) {
                     if ( noAtingido->up->oqueTemNesseNo != PORTA_AVIAO ) {
@@ -487,12 +491,350 @@ void verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido
                         }
                     }
                 }
-                
+                return 1;
+                break;
             default:
+                return 0;
                 break;
         }
        
     }
 
     
+}; 
+
+
+
+void distribuirBarcosAleatorios (list *L) {
+    char letras[12] = {'A','B', 'C', 'D', 'E', 'F','G','H','I','J','K','L'};
+    fieldNode *posicaoQVaiColocar;
+    int k = 0;
+    int j = 0;
+    int p = 0;
+    int numeroDeBarcosGerados = 0;
+    int letraPosicao;
+    int numeroPosicao;
+    int direcao;
+
+    srand(time(NULL));
+
+  
+ 
+    while ( numeroDeBarcosGerados < 9 ) {
+       
+        
+        if (numeroDeBarcosGerados == 0) {
+
+
+            k = (rand() % 9) + 1;
+            if ( k >= 1 && k <= 5) {
+                direcao = VERTICAL;
+            }else {
+                direcao = HORIZONTAL;
+            }
+            
+            letraPosicao = (rand() % 6) + 1;
+            numeroPosicao = (rand() % 6) + 1;
+            letraPosicao = letras[letraPosicao];
+            posicaoQVaiColocar = acharPosicaoDeUmNo(L, numeroPosicao, letraPosicao);
+            while ( j < 5 && posicaoQVaiColocar->oqueTemNesseNo == AGUA ) {
+                
+                if ( direcao == VERTICAL ) {
+                    posicaoQVaiColocar = posicaoQVaiColocar->down;
+                }else {
+                    posicaoQVaiColocar = posicaoQVaiColocar->right;
+                }
+                j += 1;
+            }
+            if (j == 5) {
+                colocarEmbarcacaoNaPosicao(L, PORTA_AVIAO, direcao, numeroPosicao, letraPosicao);
+                numeroDeBarcosGerados += 1 ;
+                
+            }
+
+            
+        }else if (numeroDeBarcosGerados == 1) {
+            j = 0;
+            p = 0;
+            while (p < 2) {
+
+
+                k = (rand() % 9) + 1;
+                if ( k >= 1 && k <= 5) {
+                    direcao = VERTICAL;
+                }else {
+                    direcao = HORIZONTAL;
+                }
+               
+
+                letraPosicao = (rand() % 9) + 1;
+                numeroPosicao = (rand() % 9) + 1;
+                letraPosicao = letras[letraPosicao];
+                posicaoQVaiColocar = acharPosicaoDeUmNo(L, numeroPosicao, letraPosicao);
+                while ( j < 3 && posicaoQVaiColocar->oqueTemNesseNo == AGUA ) {
+                   
+                    if ( direcao == VERTICAL ) {
+                        posicaoQVaiColocar = posicaoQVaiColocar->down;
+                    }else {
+                        posicaoQVaiColocar = posicaoQVaiColocar->right;
+                    }
+                    j += 1;
+                }
+                if (j == 3) {
+                    colocarEmbarcacaoNaPosicao(L, DESTROYER, direcao, numeroPosicao, letraPosicao);
+                    p += 1;
+                    numeroDeBarcosGerados +=1;
+                }
+            }
+        }else if (numeroDeBarcosGerados == 3) {
+            j = 0;
+            p = 0;
+            while (p < 3) {
+
+
+                k = (rand() % 9) + 1;
+                if ( k >= 1 && k <= 5) {
+                    direcao = VERTICAL;
+                }else {
+                    direcao = HORIZONTAL;
+                }
+
+
+               
+                letraPosicao = (rand() % 9) + 1;
+                numeroPosicao = (rand() % 9) + 1;
+                letraPosicao = letras[letraPosicao];
+                posicaoQVaiColocar = acharPosicaoDeUmNo(L, numeroPosicao, letraPosicao);
+                while ( j < 3 && posicaoQVaiColocar->oqueTemNesseNo == AGUA ) {
+                   
+                    if ( direcao == VERTICAL ) {
+                        posicaoQVaiColocar = posicaoQVaiColocar->down;
+                    }else {
+                        posicaoQVaiColocar = posicaoQVaiColocar->right;
+                    }
+                    j += 1;
+                }
+                if (j == 3) {
+                    colocarEmbarcacaoNaPosicao(L, FRAGATAS, direcao, numeroPosicao, letraPosicao);
+                    p += 1;
+                    numeroDeBarcosGerados +=1;
+                }
+            
+            }   
+            
+        } else if (numeroDeBarcosGerados == 6) {
+            j = 0;
+            p = 0;
+            while (p < 2) {
+
+                k = (rand() % 9) + 1;
+                if ( k >= 1 && k <= 5) {
+                    direcao = VERTICAL;
+                }else {
+                    direcao = HORIZONTAL;
+                }
+                
+                letraPosicao = (rand() % 9) + 1;
+                numeroPosicao = (rand() % 9) + 1;
+                letraPosicao = letras[letraPosicao];
+                posicaoQVaiColocar = acharPosicaoDeUmNo(L, numeroPosicao, letraPosicao);
+              
+                if ( posicaoQVaiColocar->oqueTemNesseNo == AGUA ) {
+                    colocarEmbarcacaoNaPosicao(L, SUBMARINO, direcao, numeroPosicao, letraPosicao);
+                    p += 1;
+                    numeroDeBarcosGerados +=1;
+                }
+            }
+        }else {
+                k = (rand() % 9) + 1;
+                if ( k >= 1 && k <= 5) {
+                    direcao = VERTICAL;
+                }else {
+                    direcao = HORIZONTAL;
+                }
+
+
+                letraPosicao = (rand() % 9) + 1;
+                numeroPosicao = (rand() % 9) + 1;
+                letraPosicao = letras[letraPosicao];
+                posicaoQVaiColocar = acharPosicaoDeUmNo(L, numeroPosicao, letraPosicao);
+              
+                if ( posicaoQVaiColocar->oqueTemNesseNo == AGUA ) {
+                    colocarEmbarcacaoNaPosicao(L, JANGADA, direcao, numeroPosicao, letraPosicao);
+                    p += 1;
+                    numeroDeBarcosGerados +=1;
+                }
+        }
+       
+    }
+}; 
+
+
+
+
+
+void distribuirBarcosAleatoriosComputador (list *L) {
+    char letras[12] = {'A','B', 'C', 'D', 'E', 'F','G','H','I','J','K','L'};
+    fieldNode *posicaoQVaiColocar;
+    int k = 0;
+    int j = 0;
+    int p = 0;
+    int numeroDeBarcosGerados = 0;
+    int letraPosicao;
+    int numeroPosicao;
+    int direcao;
+
+    srand(time(NULL));
+
+  
+ 
+    while ( numeroDeBarcosGerados < 9 ) {
+       
+        
+        if (numeroDeBarcosGerados == 0) {
+
+
+            k = (rand() % 9) + 1;
+            if ( k >= 1 && k <= 5) {
+                direcao = VERTICAL;
+            }else {
+                direcao = HORIZONTAL;
+            }
+            
+            letraPosicao = (rand() % 5) + 2;
+            numeroPosicao = (rand() % 5) + 2;
+            letraPosicao = letras[letraPosicao];
+            posicaoQVaiColocar = acharPosicaoDeUmNo(L, numeroPosicao, letraPosicao);
+            while ( j < 5 && posicaoQVaiColocar->oqueTemNesseNo == AGUA ) {
+                
+                if ( direcao == VERTICAL ) {
+                    posicaoQVaiColocar = posicaoQVaiColocar->down;
+                }else {
+                    posicaoQVaiColocar = posicaoQVaiColocar->right;
+                }
+                j += 1;
+            }
+            if (j == 5) {
+                colocarEmbarcacaoNaPosicao(L, PORTA_AVIAO, direcao, numeroPosicao, letraPosicao);
+                numeroDeBarcosGerados += 1 ;
+                
+            }
+
+            
+        }else if (numeroDeBarcosGerados == 1) {
+            j = 0;
+            p = 0;
+            while (p < 2) {
+
+
+                k = (rand() % 8) + 2;
+                if ( k >= 1 && k <= 5) {
+                    direcao = VERTICAL;
+                }else {
+                    direcao = HORIZONTAL;
+                }
+               
+
+                letraPosicao = (rand() % 7) + 3;
+                numeroPosicao = (rand() % 6) + 3;
+                letraPosicao = letras[letraPosicao];
+                posicaoQVaiColocar = acharPosicaoDeUmNo(L, numeroPosicao, letraPosicao);
+                while ( j < 3 && posicaoQVaiColocar->oqueTemNesseNo == AGUA ) {
+                   
+                    if ( direcao == VERTICAL ) {
+                        posicaoQVaiColocar = posicaoQVaiColocar->down;
+                    }else {
+                        posicaoQVaiColocar = posicaoQVaiColocar->right;
+                    }
+                    j += 1;
+                }
+                if (j == 3) {
+                    colocarEmbarcacaoNaPosicao(L, DESTROYER, direcao, numeroPosicao, letraPosicao);
+                    p += 1;
+                    numeroDeBarcosGerados +=1;
+                }
+                j = 0;
+            }
+        }else if (numeroDeBarcosGerados == 3) {
+            j = 0;
+            p = 0;
+            while (p < 3) {
+
+
+                k = (rand() % 9) + 1;
+                if ( k >= 1 && k <= 5) {
+                    direcao = VERTICAL;
+                }else {
+                    direcao = HORIZONTAL;
+                }
+
+
+               
+                letraPosicao = (rand() % 8) + 2;
+                numeroPosicao = (rand() % 8) + 2;
+                letraPosicao = letras[letraPosicao];
+                posicaoQVaiColocar = acharPosicaoDeUmNo(L, numeroPosicao, letraPosicao);
+                while ( j < 4 && posicaoQVaiColocar->oqueTemNesseNo == AGUA ) {
+                   
+                    if ( direcao == VERTICAL ) {
+                        posicaoQVaiColocar = posicaoQVaiColocar->down;
+                    }else {
+                        posicaoQVaiColocar = posicaoQVaiColocar->right;
+                    }
+                    j += 1;
+                }
+                if (j == 4) {
+                    colocarEmbarcacaoNaPosicao(L, FRAGATAS, direcao, numeroPosicao, letraPosicao);
+                    p += 1;
+                    numeroDeBarcosGerados +=1;
+                }
+                j = 0;
+            
+            }   
+            
+        } else if (numeroDeBarcosGerados == 6) {
+            j = 0;
+            p = 0;
+            while (p < 2) {
+
+                k = (rand() % 8) + 2;
+                if ( k >= 1 && k <= 5) {
+                    direcao = VERTICAL;
+                }else {
+                    direcao = HORIZONTAL;
+                }
+                
+                letraPosicao = (rand() % 8) + 2;
+                numeroPosicao = (rand() % 8) + 2;
+                letraPosicao = letras[letraPosicao];
+                posicaoQVaiColocar = acharPosicaoDeUmNo(L, numeroPosicao, letraPosicao);
+              
+                if ( posicaoQVaiColocar->oqueTemNesseNo == AGUA ) {
+                    colocarEmbarcacaoNaPosicao(L, SUBMARINO, direcao, numeroPosicao, letraPosicao);
+                    p += 1;
+                    numeroDeBarcosGerados +=1;
+                }
+            }
+        }else {
+                k = (rand() % 9) + 1;
+                if ( k >= 1 && k <= 5) {
+                    direcao = VERTICAL;
+                }else {
+                    direcao = HORIZONTAL;
+                }
+
+
+                letraPosicao = (rand() % 8) + 2;
+                numeroPosicao = (rand() % 8) + 2;
+                letraPosicao = letras[letraPosicao];
+                posicaoQVaiColocar = acharPosicaoDeUmNo(L, numeroPosicao, letraPosicao);
+              
+                if ( posicaoQVaiColocar->oqueTemNesseNo == AGUA ) {
+                    colocarEmbarcacaoNaPosicao(L, JANGADA, direcao, numeroPosicao, letraPosicao);
+                    p += 1;
+                    numeroDeBarcosGerados +=1;
+                }
+        }
+       
+    }
 }; 

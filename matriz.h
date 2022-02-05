@@ -33,7 +33,7 @@ typedef struct  no_letter {
 } letterNode ;
 
 typedef struct jogador_S {
-    int portaAviao, jangada, destroyer, fragata, submarino;
+   
     fieldNode *submarino1;
     fieldNode *submarino2;
     int totalDeEmbarcacoes;
@@ -66,7 +66,7 @@ void linkVerticalLists (list *L);
 
 void printList(list *L);
 
-void printList(list *L);
+void printListPc(list *L);
 
 
 

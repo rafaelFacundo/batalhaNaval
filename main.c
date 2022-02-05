@@ -2,31 +2,23 @@
 #include <stdlib.h>
 #include "matriz.h"
 #include "jogabilidade.h"
+#include "controlarOJogo.h"
 
 int main () {
     list *L;
     list *TabuleiroComputador;
     jogador *player;
     jogador *computador;
+    int resposta = 1;
     player = malloc(sizeof(jogador));
     computador = malloc(sizeof(jogador));
 
-    player->totalDeEmbarcacoes = 9;
-    player->submarino = 2;
-    player->jangada = 1;
-    player->fragata = 3;
-    player->portaAviao = 1;
-    player->destroyer = 2;
+    player->totalDeEmbarcacoes = 8;
     player->tipoDeJogador = JOGADOR;
     player->submarino1 = NULL;
     player->submarino2 = NULL;
 
-    computador->totalDeEmbarcacoes = 9;
-    computador->submarino = 2;
-    computador->jangada = 1;
-    computador->fragata = 3;
-    computador->portaAviao = 1;
-    computador->destroyer = 2;
+    computador->totalDeEmbarcacoes = 8;
     player->tipoDeJogador = COMPUTADOR;
     computador->submarino1 = NULL;
     computador->submarino2 = NULL;
@@ -38,22 +30,32 @@ int main () {
     TabuleiroComputador->donoDoTabuleiro = computador;
 
     
+     
 
     assembleTheLetterList(L);
 
     linkVerticalLists(L);
 
+    distribuirBarcosAleatorios(L);
+
     assembleTheLetterList(TabuleiroComputador);
 
     linkVerticalLists(TabuleiroComputador);
-    
 
+    distribuirBarcosAleatoriosComputador(TabuleiroComputador);
 
+    while ( resposta == 1 ) {
+      resposta =  chamaRodadas(L, TabuleiroComputador);
+    };
+
+   
     
+    /* printList(L);
+    printList(TabuleiroComputador); */
     
     //acharPosicaoDeUmNo(L, 4, 'F');
 
-    colocarEmbarcacaoNaPosicao( TabuleiroComputador, PORTA_AVIAO , HORIZONTAL,  2, 'C');
+    /* colocarEmbarcacaoNaPosicao( TabuleiroComputador, PORTA_AVIAO , HORIZONTAL,  2, 'C');
 
     colocarEmbarcacaoNaPosicao( TabuleiroComputador, DESTROYER, VERTICAL,  4, 'K');
 
@@ -61,11 +63,11 @@ int main () {
 
     colocarEmbarcacaoNaPosicao( TabuleiroComputador, JANGADA , HORIZONTAL,  12, 'A');
 
-    colocarEmbarcacaoNaPosicao( TabuleiroComputador, SUBMARINO , HORIZONTAL,  11, 'J');
+    colocarEmbarcacaoNaPosicao( TabuleiroComputador, SUBMARINO , HORIZONTAL,  11, 'J'); */
 
     //-----------------------------------------------------------------------------------------
 
-    colocarEmbarcacaoNaPosicao( L, PORTA_AVIAO , HORIZONTAL,  2, 'C');
+    /* colocarEmbarcacaoNaPosicao( L, PORTA_AVIAO , HORIZONTAL,  2, 'C');
 
     colocarEmbarcacaoNaPosicao( L, DESTROYER, VERTICAL,  4, 'K');
 
@@ -73,23 +75,18 @@ int main () {
 
     colocarEmbarcacaoNaPosicao( L, JANGADA , HORIZONTAL,  12, 'A');
 
-    colocarEmbarcacaoNaPosicao( L, SUBMARINO , HORIZONTAL,  11, 'J');
+    colocarEmbarcacaoNaPosicao( L, SUBMARINO , HORIZONTAL,  11, 'J'); */
 
-    printList(TabuleiroComputador);
+    /* printList(TabuleiroComputador);
 
-    printList(L);
+    printList(L); */
 
-    printf("-------------------------------------------------------------------\n");
 
     //---------------------------------------------------------------------------------------------
 
-  /*   DarUmTiro( TabuleiroComputador, L, 5, 'K');
+  
 
-    DarUmTiro( TabuleiroComputador, L, 4, 'C');
-
-    DarUmTiro( TabuleiroComputador, L, 5, 'F'); */
-
-    DarUmTiro( TabuleiroComputador, L, 2, 'C');
+    /* DarUmTiro( TabuleiroComputador, L, 2, 'C');
 
     DarUmTiro( TabuleiroComputador, L, 2, 'D');
 
@@ -97,15 +94,16 @@ int main () {
 
     DarUmTiro( TabuleiroComputador, L, 2, 'F');
 
-    DarUmTiro( TabuleiroComputador, L, 2, 'G');
+    DarUmTiro( TabuleiroComputador, L, 2, 'G'); */
 
-
+/* 
     printList(TabuleiroComputador);
 
-    printList(L);
+    printList(L); */
 
     //DarUmTiro(L);
 
+    //pedirPosicaoParaUsuario();
     
     
 

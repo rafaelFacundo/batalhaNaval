@@ -280,3 +280,79 @@ void linkVerticalLists (list *L) {
     }
 
 }; 
+
+
+
+
+
+void printListPc(list *L) {
+    letterNode *aux;
+    fieldNode *aux2;
+    fieldNode *aux3;
+    int k = 0;
+    aux = L->firstNode;
+    
+    /* eu fiz dois whiles pra cade tipo de lista, pq os nós são de tipos diferentes
+    ai não pensei em outro jeito de printar tudo 
+    aqui nesse while ele vai printar a lista de cima, que é a lista de letra  */
+    while (aux->prox != NULL) {
+        if ( k == 0 ) {
+            printf("%s  ", aux->information);
+            k += 1;
+        }else {
+            printf("%s ", aux->information);
+        }
+       
+        aux = aux->prox;
+    };
+    printf("%s ", aux->information);
+    printf("\n");
+
+    /* aqui após printar a lista de letras ele vai pegar o nó de baixo 
+    do primeiro nó da lista de letras  */
+    aux2 = L->firstNode->down;
+
+    /* aqui printa cada lista horizontal
+    funciona assim: 
+    eu pego um nó da primeira lista vertical, no caso a que tem os números, 
+    printo esse nó 
+    após isso, usando o encadeamento pelas laterais 
+    eu ando uma casa pro lado, printo esse nó que eu cheguei, 
+    depois ando mais uma casa pro lado, printo, depois ando....
+    isso se repete até que eu chegue no nulo, isso é para uma lista na horizontal 
+    eu repito esse mesmo processo para cada nó da primeira lista de números*/
+    while (aux2 != NULL) {
+        if ( aux2->tipo == 0 ) {
+            printf("%c  ", *(char*)aux2->info);
+        }else {
+            if ( *(int*)aux2->info < 10 ) {
+                printf("%d  ", *(int*)aux2->info);
+            }else {
+                printf("%d ", *(int*)aux2->info);
+            }
+            
+        };
+        /* após printar o nó da lista de números
+        eu ando uma casa para a direita */
+        aux3 = aux2->right;
+        
+        /* Aqui é a parte que eu ando até o fim de cada lista horizontal 
+        e printo cada elemento */
+        while (aux3 != NULL) {
+            
+            if ( aux3->tipo == 0 ) {
+            printf("%c ", *(char*)aux3->info);
+            }else {
+                printf("%d ", *(int*)aux3->info);
+            };
+            aux3 = aux3->right;
+           
+        };
+        printf("\n");
+        aux2 = aux2->down;
+        
+    };
+
+
+}
+
