@@ -12,11 +12,18 @@
 #define FRAGATAS 4 
 #define PORTA_AVIAO 5
 
+#define VERTICAL 6
+#define HORIZONTAL 7
+
+#define JOGADOR 8
+#define COMPUTADOR 9
+
 typedef struct node_s {
     struct node_s *left, *right, *up, *down;
 	void *info;
 	int tipo;
-	int chave;
+    int oqueTemNesseNo;
+	int direcao;
 } fieldNode;
 
 typedef struct  no_letter {
@@ -25,14 +32,25 @@ typedef struct  no_letter {
     char information[1];
 } letterNode ;
 
+typedef struct jogador_S {
+    int portaAviao, jangada, destroyer, fragata, submarino;
+    fieldNode *submarino1;
+    fieldNode *submarino2;
+    int totalDeEmbarcacoes;
+    int tipoDeJogador;
+}jogador;
 
 typedef struct list_s {
     letterNode *firstNode;
+    jogador *donoDoTabuleiro;
 }list;
 
 typedef struct list_Field {
     fieldNode *firstNode;
 }fieldList;
+
+
+
 
 list *createList (); 
 

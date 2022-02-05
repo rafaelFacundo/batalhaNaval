@@ -202,7 +202,7 @@ fieldNode *CreateVertical (letterNode *A,  fieldList *L, int typeOfTheList ) {
 
     while( k < 13) {
         newNode = malloc(sizeof(fieldNode));
-        newNode->tipo = AGUA;
+        newNode->oqueTemNesseNo = AGUA;
         newNode->down = NULL;
         newNode->left = NULL;
         newNode->right = NULL;
