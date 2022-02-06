@@ -6,7 +6,7 @@
 #include "controlarOJogo.h"
 
 int pedirPosicaoParaUsuario (list *listaQuemAtaca, list *listaAlvo) {
-    char posicoes[12] = {'A', 'B', 'C', 'D', 'E', 'F','G','H','I','J','K','L'};
+    char posicoes[13] = {'"','A', 'B', 'C', 'D', 'E', 'F','G','H','I','J','K','L'};
     char entradaDoUsuario[4];
     int numeroDaPosicao = -1;
     int letraDaPosicao = -1;
@@ -18,14 +18,14 @@ int pedirPosicaoParaUsuario (list *listaQuemAtaca, list *listaAlvo) {
     while ( numeroDaPosicao == -1 || letraDaPosicao == -1 ) {
         printf("Vamos lá marujo, diga a posição que você quer atigir: ");
         scanf("%s", entradaDoUsuario);
-       
+        
         while ( j < 4 && toupper(entradaDoUsuario[j]) != posicoes[k] ) {
-
-            while ( k < 12 && toupper(entradaDoUsuario[j]) != posicoes[k] ) {
-                
+           
+            while ( k < 13 && toupper(entradaDoUsuario[j]) != posicoes[k] ) {
+                 
                 k += 1;
             }
-            if ( k == 12 && toupper(entradaDoUsuario[j]) != posicoes[k]) {
+            if ( k == 13 || toupper(entradaDoUsuario[j]) != posicoes[k]) {
                 k = 0;
                 j += 1;
             }else {
@@ -37,6 +37,7 @@ int pedirPosicaoParaUsuario (list *listaQuemAtaca, list *listaAlvo) {
             printf("entrada inválida\n");
             numeroDaPosicao = -1;
             letraDaPosicao = -1;
+            j = 0;
         }else {
             j = 0;
            
@@ -45,16 +46,20 @@ int pedirPosicaoParaUsuario (list *listaQuemAtaca, list *listaAlvo) {
                 j += 1;
             }
             if ( j < 3) {
-                if ( entradaDoUsuario[j+1] >= 49 && entradaDoUsuario[j+1] <= 57 ) {
+                if ( (entradaDoUsuario[j] >= 49 && entradaDoUsuario[j] <= 57) && (entradaDoUsuario[j+1] >= 49 && entradaDoUsuario[j+1] <= 57) ) {
+                    
                     if ( entradaDoUsuario[j+1] >= 48 && entradaDoUsuario[j+1] <= 50 ) {
                      
                         numeroDaPosicao = entradaDoUsuario[j] - '0';
                         numeroDaPosicao *= 10;
                         numeroDaPosicao += entradaDoUsuario[j+1] - '0';
+                       
                     }else {
                         printf("entrada inválida\n");
+                        
                         numeroDaPosicao = -1;
                         letraDaPosicao = -1;
+                        j = 0;
 
                     }
                 }else {
@@ -62,8 +67,10 @@ int pedirPosicaoParaUsuario (list *listaQuemAtaca, list *listaAlvo) {
                     numeroDaPosicao = entradaDoUsuario[j] - '0';
                 }
             }
+            j = 0;
+            k = 0;
         }
-       
+      
         /* if ( numeroDaPosicao == -1 || letraDaPosicao == -1 ) {
             printf("entrada inválida\n");
         } */

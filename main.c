@@ -13,6 +13,12 @@ int main () {
     player = malloc(sizeof(jogador));
     computador = malloc(sizeof(jogador));
 
+    
+
+
+    L = createList();
+    TabuleiroComputador = createList();
+    
     player->totalDeEmbarcacoes = 8;
     player->tipoDeJogador = JOGADOR;
     player->submarino1 = NULL;
@@ -23,9 +29,6 @@ int main () {
     computador->submarino1 = NULL;
     computador->submarino2 = NULL;
 
-
-    L = createList();
-    TabuleiroComputador = createList();
     L->donoDoTabuleiro = player;
     TabuleiroComputador->donoDoTabuleiro = computador;
 

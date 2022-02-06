@@ -61,8 +61,10 @@ int DarUmTiro( list *L, list *listaAtirador, int numero, int letra ) {
 
     if ( ponteiroComAposicao->oqueTemNesseNo == AGUA) {
         *((char*)ponteiroComAposicao->info) = 'O';
+        ponteiroComAposicao->podeMostrar = 1;
     }else {
         *((char*)ponteiroComAposicao->info) = '*';
+        ponteiroComAposicao->podeMostrar = 1;
         k = verificarOsDanosDoTiro( L, listaAtirador, ponteiroComAposicao );
     }
 
@@ -585,6 +587,7 @@ void distribuirBarcosAleatorios (list *L) {
                     p += 1;
                     numeroDeBarcosGerados +=1;
                 }
+                j = 0;
             }
         }else if (numeroDeBarcosGerados == 3) {
             j = 0;
@@ -619,6 +622,7 @@ void distribuirBarcosAleatorios (list *L) {
                     p += 1;
                     numeroDeBarcosGerados +=1;
                 }
+                j = 0;
             
             }   
             
@@ -644,6 +648,7 @@ void distribuirBarcosAleatorios (list *L) {
                     p += 1;
                     numeroDeBarcosGerados +=1;
                 }
+
             }
         }else {
                 k = (rand() % 9) + 1;

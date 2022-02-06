@@ -119,7 +119,7 @@ void assembleTheLetterList ( list *L ) {
             aux->prox = NULL;
             L->firstNode = aux;
             l = createFieldList();
-            CreateVertical ( aux, l, FieldNumbers);
+            CreateVertical ( L, aux, l, FieldNumbers);
             //printList(L);
         }else if (k == 1) {
          
@@ -128,7 +128,7 @@ void assembleTheLetterList ( list *L ) {
             aux->prox = NULL;
             L->firstNode->prox = aux;
             l = createFieldList();
-            CreateVertical ( aux, l, EdgeSymbols);
+            CreateVertical (L, aux, l, EdgeSymbols);
             //printList(L);
         }else { 
           
@@ -145,9 +145,9 @@ void assembleTheLetterList ( list *L ) {
                 l = createFieldList();
                 if (k == 12) {
                     
-                    CreateVertical ( NewNode, l, EdgeSymbols);
+                    CreateVertical (L, NewNode, l, EdgeSymbols);
                 }else {
-                    CreateVertical ( NewNode, l, BattleFields);
+                    CreateVertical (L,  NewNode, l, BattleFields);
                 }
                
                 aux = aux->prox;
@@ -175,7 +175,7 @@ dependendo do tipo o o caractere desse nó muda
 depois ela entra no while e vai criando cada nó e encadeando com os anterioes 
 pra formar a lista vertical */
 
-fieldNode *CreateVertical (letterNode *A,  fieldList *L, int typeOfTheList ) {
+fieldNode *CreateVertical (list *ListaDoDono, letterNode *A,  fieldList *L, int typeOfTheList ) {
     int numbers[13] = {1,2,3,4,5,6,7,8,9,10,11,12,0};
     char symbols = '|';
     int k = 0;
@@ -197,6 +197,7 @@ fieldNode *CreateVertical (letterNode *A,  fieldList *L, int typeOfTheList ) {
     aux->left = NULL;
     aux->right = NULL;
     aux->up = NULL; 
+    aux->podeMostrar = 1;
     L->firstNode = aux;
 
 
@@ -207,30 +208,41 @@ fieldNode *CreateVertical (letterNode *A,  fieldList *L, int typeOfTheList ) {
         newNode->left = NULL;
         newNode->right = NULL;
         newNode->up = NULL; 
+        newNode->podeMostrar = 0;
         if (numbers[k] == 0 && typeOfTheList == FieldNumbers) {
             newNode->info = malloc(sizeof(char));
             *((char*)newNode->info) = ' ';
             newNode->tipo = 0;
+            newNode->podeMostrar = 1;
         }else if (numbers[k] == 0 && typeOfTheList == EdgeSymbols) {
             newNode->info = malloc(sizeof(char));
             *((char*)newNode->info) = '+';
             newNode->tipo = 0;
+            newNode->podeMostrar = 1;
         }else if (numbers[k] == 0 && typeOfTheList == BattleFields) {
             newNode->info = malloc(sizeof(char));
             *((char*)newNode->info) = '-';
             newNode->tipo = 0;
+            newNode->podeMostrar = 1;
         }else if (typeOfTheList == FieldNumbers) {
             newNode->info = malloc(sizeof(char));
             *((int*)newNode->info) = numbers[k];
             newNode->tipo = 1;
+            newNode->podeMostrar = 1;
         }else if (typeOfTheList == EdgeSymbols){
             newNode->info = malloc(sizeof(char));  
             *((char*)newNode->info) = symbols;
             newNode->tipo = 0;
+            newNode->podeMostrar = 1;
         }else {
+           
             newNode->info = malloc(sizeof(char));
             *((char*)newNode->info) = ' ';
             newNode->tipo = 0;
+            if ( ListaDoDono->donoDoTabuleiro->tipoDeJogador == COMPUTADOR ) {
+               
+                newNode->podeMostrar = 0;
+            }
         }
 
         aux->down = newNode;
@@ -339,12 +351,22 @@ void printListPc(list *L) {
         /* Aqui é a parte que eu ando até o fim de cada lista horizontal 
         e printo cada elemento */
         while (aux3 != NULL) {
+
             
-            if ( aux3->tipo == 0 ) {
-            printf("%c ", *(char*)aux3->info);
+
+            if ( aux3->podeMostrar == 1 ) {
+               
+                if ( aux3->tipo == 0 ) {
+                    printf("%c ", *(char*)aux3->info);
+                }else {
+                    printf("%d ", *(int*)aux3->info);
+                };
             }else {
-                printf("%d ", *(int*)aux3->info);
-            };
+               
+                printf("  ");
+            }
+          
+            
             aux3 = aux3->right;
            
         };

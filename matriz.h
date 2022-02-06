@@ -24,6 +24,7 @@ typedef struct node_s {
 	int tipo;
     int oqueTemNesseNo;
 	int direcao;
+    int podeMostrar;
 } fieldNode;
 
 typedef struct  no_letter {
@@ -60,7 +61,7 @@ void assembleTheLetterList ( list *L );
 
 void assembleTheEdgesList ( list *L );
 
-fieldNode *CreateVertical( letterNode *A, fieldList *L, int typeOfInformation );
+fieldNode *CreateVertical( list *ListaDoDono, letterNode *A, fieldList *L, int typeOfInformation );
 
 void linkVerticalLists (list *L); 
 
