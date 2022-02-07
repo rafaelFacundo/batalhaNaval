@@ -39,11 +39,11 @@ int main () {
 
     linkVerticalLists(L);
 
-    distribuirBarcosAleatorios(L);
-
     assembleTheLetterList(TabuleiroComputador);
 
     linkVerticalLists(TabuleiroComputador);
+
+    distribuirBarcosAleatorios(L);
 
     distribuirBarcosAleatoriosComputador(TabuleiroComputador);
 

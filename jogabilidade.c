@@ -73,12 +73,17 @@ int DarUmTiro( list *L, list *listaAtirador, int numero, int letra ) {
 };
 
 
- /* DESTROYER 2
- SUBMARINO 3
- FRAGATAS 4 
- PORTA_AVIAO  */
 
-
+/* essa função basicamente recebe o tipo da embarcação que vai ser colcodo 
+a direcão e o numero e a letra da posição 
+ela chama a função de achar a posição 
+pega o ponteiro que foi retornado por essa função 
+e ela sempre coloca da direta pra esquerda ou de cima pra baixo 
+além disso ela verifica a direção para mudar os caracteres '^' '>' '<' 'V' 
+pra cada embarcação ela entra no while que roda o numero do tamanho da embarcação 
+e coloca o tipo de embarcação na direção especificada 
+para "colocar" oque ela faz é mudar oque está escrito no nó para a representação da embarcação 
+*/
 
 void colocarEmbarcacaoNaPosicao( list *L, int tipoDaEmbarcacao, int direcao,  int numeroDaPosicao, int letraDaPosicao ) {
     fieldNode *posicaoOndeColocarOBarco;
@@ -182,6 +187,37 @@ void colocarEmbarcacaoNaPosicao( list *L, int tipoDaEmbarcacao, int direcao,  in
     }
 
 };
+
+
+/* essa função verifica se o tiro acertou uma embarcação 
+se foi JANGADA retorna 0 senão retorna 1
+ela pega o ponteiro do no atingido 
+e verifica qual o tipo se foi jangada faz oque foi especificado no trabalho 
+se foi outro tipo de embarcação ela vai verificar 
+se já foi afundado 
+se foi ela tira os pontos de quem perdeu a embarcação 
+e diz quem afundou 
+ela faz isso assim :
+para verificar se já foi atingido ela olha se oq tem escrito é o caractere "*"
+ela olha qual o tipo de embarcação 
+se for submarino já afundou pois só tem uma casa 
+se for fragata que tem duas casas 
+ele verifica se o no atingido é o da esquerda ou da direita 
+se for da esquerda ela olha se o da direita já foi atingido 
+    se  atingida foi ela tira os pontos de quem perdeu e diz quem afundou 
+se foi da direita ela repete a mesma coisa acima só trocando as posições 
+se for destroyer que tem 3 casas 
+ela verifica se o no atingido foi das pontas ou do meio 
+se foi de uma ponto ela olha se os proximos dois foram atingidos 
+se for do meio ela olha se os dois de cada lado foram atingidos 
+     se atingida  foi ela tira os pontos de quem perdeu e diz quem afundou
+se for um porta aviões
+ela olha se o no atingido foi de uma das pontas 
+se foi ela "anda" com um while(que roda 5 vezes, o tamanho do barco) até a outra ponto verificando
+se todas as outras posições foram atingidas 
+se o no for um no do meio 
+ela anda até encontrar uma ponta, depois repete o que foi citado acima, anda até a outra ponto verificando 
+      se  atingida foi ela tira os pontos de quem perdeu e diz quem afundou */
 
 
 int verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido ) {
@@ -506,6 +542,23 @@ int verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido 
 }; 
 
 
+/* essa função gera as posiçãoes aleatorias dos barcos 
+ela usa srand e rand 
+e oq ela faz é 
+primeiro ela coloca o porta aviões q é o maior logo já limitamos o intervalo para que não bata nas bordas
+colocamos na ordem porta aviao, destroyer, fragata, submarino e jangada 
+cada um deles limitamos o intervalo em que pode ser gerados as casas para que não bata na borda
+assim apos isso geramos um valor para decidir se o barco vai ficar na HORIZONTAL ou VERTICAL
+depois geramos um valor para pegar uma letra correspondente na arrays de letras disponiveis 
+apos isso chamamos a função de achar posição 
+pegamos o ponteiro que ela retorna e entramos em um while para vericar 
+se a quandidade de casas necessarias para incluir a embarcação está disponivel ou se ja tem outra embarcação 
+o while roda até a variavel j seja igual o numero de vezes do tamanho da embarcação e 
+que oque esteja no no seja agua 
+ou seja, se o j chegar até o numero igual o tamanho da embarcação signfica que 
+apartir da posição que geramos temos o numero de casa necessarias para colocar essa embarcação lá 
+verificamos isso em um if e se for verdadeiro chamaos a função de colcoar um barco no tabuleiro */
+
 
 void distribuirBarcosAleatorios (list *L) {
     char letras[12] = {'A','B', 'C', 'D', 'E', 'F','G','H','I','J','K','L'};
@@ -677,6 +730,12 @@ void distribuirBarcosAleatorios (list *L) {
 
 
 
+/* tem a mesma função da anterior 
+e funciona da mesma maneira 
+só muda os intervalos 
+que são intervalos equivalentes
+só para garantir que o pc não esteja gerando os mesmos valores
+para o jogador e para o pc  */
 
 void distribuirBarcosAleatoriosComputador (list *L) {
     char letras[12] = {'A','B', 'C', 'D', 'E', 'F','G','H','I','J','K','L'};

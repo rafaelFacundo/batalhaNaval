@@ -1,10 +1,16 @@
 #ifndef MATRIZLIB
 #define MATRIZLIB
 
+
+//usado para saber o "tipo da casa" do tabuleiro 
+//pois é precisa na hora de contrruir o tabuleiro 
+//saber se vamos colocar um numero, uma letra ou uma casa para as embarcações 
 #define FieldNumbers 0
 #define EdgeSymbols 1
 #define BattleFields 2
 
+//usados para saber oque foi atingido na hora de dar o tiro 
+// e q tipo de embarcação colocar no tabuleiro na hora de distribuir
 #define AGUA 0
 #define JANGADA 1
 #define DESTROYER 2
@@ -12,9 +18,14 @@
 #define FRAGATAS 4 
 #define PORTA_AVIAO 5
 
+//usados tanto para colocar os barcos na posição 
+//quanto para verificar o dano do tiro 
 #define VERTICAL 6
 #define HORIZONTAL 7
 
+
+//usado para diferenciar tanto os pontos 
+//quem ataca quem é atacado 
 #define JOGADOR 8
 #define COMPUTADOR 9
 
