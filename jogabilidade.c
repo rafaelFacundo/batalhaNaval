@@ -244,6 +244,7 @@ int verificarOsDanosDoTiro( list *L, list *listaAtidador, fieldNode *noAtingido 
         }
         return 0;
     }else if ( noAtingido->oqueTemNesseNo == SUBMARINO ) {
+        
         if ( listaAtidador->donoDoTabuleiro->tipoDeJogador == JOGADOR ) {
             printf("O jogador afundou um submarino do computador.\n");
            
@@ -726,8 +727,6 @@ void distribuirBarcosAleatorios (list *L) {
        
     }
 }; 
-
-
 
 
 /* tem a mesma função da anterior 

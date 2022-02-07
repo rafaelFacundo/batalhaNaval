@@ -4,6 +4,22 @@
 #include "jogabilidade.h"
 #include "controlarOJogo.h"
 
+//Integrantes da equipe - 
+//Addson Vinicyus - matricula - 512178
+//Responsável por:
+//    JogadaPc.c
+//    verificarDanosDosTiros, DarUmTiro(Jogabilidade.c)
+
+//Rafael Facundo da Costa - matricula - 511798
+//Responsável por: 
+//    Criartubuleiro.c 
+//    Achar a posição de um no, colocarEmbarcação na posição,(jogabilidade.c)
+
+//Carla Suenne Barbosa da Silva - matricula - 508373
+//Responsável por: 
+//    CotrolarOJogo.c 
+//    distribuirBarcosAleatorios, distribuirBarcosAleatoriosComputador(Jogabilidade.c)
+
 int main () {
     list *L;
     list *TabuleiroComputador;
@@ -53,61 +69,7 @@ int main () {
 
    
     
-    /* printList(L);
-    printList(TabuleiroComputador); */
-    
-    //acharPosicaoDeUmNo(L, 4, 'F');
-
-    /* colocarEmbarcacaoNaPosicao( TabuleiroComputador, PORTA_AVIAO , HORIZONTAL,  2, 'C');
-
-    colocarEmbarcacaoNaPosicao( TabuleiroComputador, DESTROYER, VERTICAL,  4, 'K');
-
-    colocarEmbarcacaoNaPosicao( TabuleiroComputador, FRAGATAS , HORIZONTAL,  10, 'G');
-
-    colocarEmbarcacaoNaPosicao( TabuleiroComputador, JANGADA , HORIZONTAL,  12, 'A');
-
-    colocarEmbarcacaoNaPosicao( TabuleiroComputador, SUBMARINO , HORIZONTAL,  11, 'J'); */
-
-    //-----------------------------------------------------------------------------------------
-
-    /* colocarEmbarcacaoNaPosicao( L, PORTA_AVIAO , HORIZONTAL,  2, 'C');
-
-    colocarEmbarcacaoNaPosicao( L, DESTROYER, VERTICAL,  4, 'K');
-
-    colocarEmbarcacaoNaPosicao( L, FRAGATAS , HORIZONTAL,  10, 'G');
-
-    colocarEmbarcacaoNaPosicao( L, JANGADA , HORIZONTAL,  12, 'A');
-
-    colocarEmbarcacaoNaPosicao( L, SUBMARINO , HORIZONTAL,  11, 'J'); */
-
-    /* printList(TabuleiroComputador);
-
-    printList(L); */
-
-
-    //---------------------------------------------------------------------------------------------
-
-  
-
-    /* DarUmTiro( TabuleiroComputador, L, 2, 'C');
-
-    DarUmTiro( TabuleiroComputador, L, 2, 'D');
-
-    DarUmTiro( TabuleiroComputador, L, 2, 'E');
-
-    DarUmTiro( TabuleiroComputador, L, 2, 'F');
-
-    DarUmTiro( TabuleiroComputador, L, 2, 'G'); */
-
-/* 
-    printList(TabuleiroComputador);
-
-    printList(L); */
-
-    //DarUmTiro(L);
-
-    //pedirPosicaoParaUsuario();
-    
+   
     
 
     return 0;
